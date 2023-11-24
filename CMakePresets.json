@@ -1,0 +1,121 @@
+{
+    "version": 2,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 15,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "base",
+            "hidden": true,
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "PRESET_NAME": "${presetName}"
+            }
+        },
+        {
+            "name": "base-emscripten",
+            "description": "Sets up Emscripten compiler",
+            "hidden": true,
+            "inherits": [
+              "base"
+            ],
+            "cacheVariables": {
+              "CMAKE_TOOLCHAIN_FILE": {
+                "type": "FILEPATH",
+                "value": "/Users/matt/dev/emscripten/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake"
+              },
+              "WASM": "1",
+              "PLATFORM": "Web",
+              "PLATFORM_WEB": "1"
+            },
+            "vendor": {
+              "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                "intelliSenseMode": "windows-clang-x86"
+              }
+            }
+        },
+        {
+            "name": "clang",
+            "hidden": true,
+            "inherits": [
+                "base"
+            ],
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++"
+            }
+        },
+        {
+            "name": "debug",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_CXX_FLAGS_INIT": "-Wall -Wextra -Wpedantic"
+            }
+        },
+        {
+            "name": "release",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "clang-debug",
+            "inherits": [
+                "clang",
+                "debug"
+            ]
+        },
+        {
+            "name": "clang-release",
+            "inherits": [
+                "clang",
+                "release"
+            ]
+        },
+        {
+            "name": "ems-wasm-debug",
+            "displayName": "ems wasm debug",
+            "inherits": [
+              "base-emscripten"
+            ],
+            "cacheVariables": {
+              "CMAKE_BUILD_TYPE": "Debug",
+              "USE_PTHREADS": "1"
+            }
+          },
+          {
+            "name": "ems-wasm-release",
+            "displayName": "ems wasm release",
+            "inherits": [
+              "base-emscripten"
+            ],
+            "cacheVariables": {
+              "CMAKE_BUILD_TYPE": "Release",
+              "USE_PTHREADS": "1"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "clang-debug",
+            "configurePreset": "clang-debug"
+        },
+        {
+            "name": "clang-release",
+            "configurePreset": "clang-release"
+        },
+        {
+            "name": "wasm-debug",
+            "configurePreset": "ems-wasm-debug"
+        },
+        {
+            "name": "wasm-release",
+            "configurePreset": "ems-wasm-release"
+        }
+    ]
+}
